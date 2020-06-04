@@ -1,0 +1,914 @@
+ {
+  "tray_export_version": 3,
+  "export_type": "workflow",
+  "projects": [],
+  "workflows": [
+    {
+      "id": "47725e4f-d826-4a92-be48-a4a439b54d1f",
+      "created": "2020-05-26T17:17:27.874Z",
+      "workspace_id": "fc3010a2-9379-439e-9448-9ae8e5e905fa",
+      "creator": "fc3010a2-9379-439e-9448-9ae8e5e905fa",
+      "version": {
+        "id": "0af9450e-8781-4e28-a9fd-3d110f4b4f54",
+        "created": "2020-06-04T21:04:09.443Z"
+      },
+      "title": "SFTP to MySQL",
+      "enabled": true,
+      "tags": [],
+      "settings": {
+        "config": {},
+        "input_schema": {},
+        "output_schema": {}
+      },
+      "steps_structure": [
+        {
+          "name": "trigger",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "ftp-client-1",
+          "type": "branch",
+          "content": {
+            "error": [
+              {
+                "name": "send-email-1",
+                "type": "normal",
+                "content": {}
+              }
+            ],
+            "success": []
+          }
+        },
+        {
+          "name": "delay-1",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "csv-reader-1",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "loop-1",
+          "type": "loop",
+          "content": {
+            "_loop": [
+              {
+                "name": "text-helpers-1",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "text-helpers-2",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "date-time-helpers-1",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "script-2",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "object-helpers-3",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "object-helpers-1",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "object-helpers-2",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "mysql-1",
+                "type": "branch",
+                "content": {
+                  "error": [
+                    {
+                      "name": "send-email-2",
+                      "type": "normal",
+                      "content": {}
+                    },
+                    {
+                      "name": "break-loop-1",
+                      "type": "break",
+                      "content": {},
+                      "target": "loop-1"
+                    }
+                  ],
+                  "success": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "terminate-1",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "script-1",
+          "type": "normal",
+          "content": {}
+        }
+      ],
+      "steps": {
+        "csv-reader-1": {
+          "title": "Get CSV",
+          "description": "Create the recently downloaded CSV from the sftp",
+          "connector": {
+            "name": "csv-reader",
+            "version": "1.3"
+          },
+          "operation": "create_csv",
+          "output_schema": {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "columns": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "column_name": {
+                      "type": "string"
+                    },
+                    "column_type": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "column_name",
+                    "column_type"
+                  ]
+                }
+              },
+              "results": {
+                "type": "object",
+                "properties": {
+                  "QueryExecutionId": {
+                    "type": "string"
+                  },
+                  "Result": {
+                    "type": "string"
+                  },
+                  "RowData": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "Company": {
+                          "type": "string"
+                        },
+                        "signupDate": {
+                          "type": "string"
+                        },
+                        "signupDateTZ": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "title",
+                        "phone",
+                        "email",
+                        "Company",
+                        "signupDate",
+                        "signupDateTZ"
+                      ]
+                    }
+                  },
+                  "NextToken": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "error_handling": {},
+          "properties": {
+            "has_header": {
+              "type": "boolean",
+              "value": true
+            },
+            "delimiter": {
+              "type": "string",
+              "value": ","
+            },
+            "end_line": {
+              "type": "string",
+              "value": "Unix / LF"
+            },
+            "return_results": {
+              "type": "boolean",
+              "value": true
+            },
+            "file": {
+              "value": "$.steps.ftp-client-1.file",
+              "type": "jsonpath"
+            },
+            "quote_char": {
+              "value": "\"",
+              "type": "string"
+            },
+            "escape_char": {
+              "value": "\"",
+              "type": "string"
+            }
+          }
+        },
+        "script-1": {
+          "title": "README",
+          "description": "readme file for workflow",
+          "connector": {
+            "name": "script",
+            "version": "2.2"
+          },
+          "operation": "execute",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "variables": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "string",
+                      "value": "foo"
+                    },
+                    "value": {
+                      "type": "string",
+                      "value": "bar"
+                    }
+                  }
+                }
+              ]
+            },
+            "script": {
+              "value": "/*\nCarm DeMaio \ncarmATcarmdemaio.me\n5/26-20 - 5/28/20\nSA Technical Assessment for Tray.io\n\nIn the spirit of iPaaS I tried to do as much as possible without custom code. I followed the\ndocumentation when it came to checking if a value (in this usecase, the value 'title') may \ninclude multiple words or phrases; which reccomended using javascript:\nhttps://tray.io/documentation/platform/useful-scripts/#checking-if-a-piece-of-text-contains-multiple-words-or-phrases-script-connector\n\nHowever I modified the script to return a boolean instead. Line 4 of this script can be modified to\nadd more titles. \n\n*/",
+              "type": "string"
+            }
+          }
+        },
+        "object-helpers-2": {
+          "title": "Object Structure",
+          "description": "Structures the schema for upload into the mySQL database",
+          "connector": {
+            "name": "object-helpers",
+            "version": "3.0"
+          },
+          "operation": "enforce_object_structure",
+          "output_schema": {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "object",
+                "properties": {
+                  "signupDate": {
+                    "type": "null"
+                  },
+                  "signupDateTZ": {
+                    "type": "null"
+                  },
+                  "phone": {
+                    "type": "null"
+                  },
+                  "last_name": {
+                    "type": "null"
+                  },
+                  "title": {
+                    "type": "null"
+                  },
+                  "first_name": {
+                    "type": "null"
+                  },
+                  "id": {
+                    "type": "null"
+                  },
+                  "student": {
+                    "type": "null"
+                  },
+                  "email": {
+                    "type": "null"
+                  },
+                  "Company": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          },
+          "error_handling": {},
+          "properties": {
+            "source": {
+              "type": "jsonpath",
+              "value": "$.steps.object-helpers-1.result"
+            },
+            "structure": {
+              "value": {
+                "signupDate": {
+                  "value": "2018-04-05",
+                  "type": "string"
+                },
+                "signupDateTZ": {
+                  "value": "2018-04-06 07:38:15",
+                  "type": "string"
+                },
+                "phone": {
+                  "value": "555-555-5555",
+                  "type": "string"
+                },
+                "last_name": {
+                  "value": "Smith",
+                  "type": "string"
+                },
+                "title": {
+                  "value": "student",
+                  "type": "string"
+                },
+                "first_name": {
+                  "value": "John",
+                  "type": "string"
+                },
+                "id": {
+                  "value": "0",
+                  "type": "string"
+                },
+                "student": {
+                  "value": "true",
+                  "type": "string"
+                },
+                "email": {
+                  "value": "jsmith@umass.edu",
+                  "type": "string"
+                },
+                "Company": {
+                  "value": "UMASS",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        },
+        "mysql-1": {
+          "title": "MySQL",
+          "connector": {
+            "name": "mysql",
+            "version": "1.6"
+          },
+          "operation": "update",
+          "output_schema": {},
+          "error_handling": {
+            "strategy": "manual"
+          },
+          "authentication": {
+            "group": "970c1051-13c3-4907-9dac-bb4773664da7",
+            "title": "Carm DeMaio's MySQL account",
+            "service_icon": {
+              "icon_type": "url",
+              "value": "//s3.amazonaws.com/images.tray.io/static/service/icons/81c3b080dad537de7e10e0987a4bf52e.png"
+            },
+            "service_id": "adc348dc-79d0-4a85-bc99-1cd9106476e2",
+            "auth_app_id": "9c746a97-069d-48a0-b46e-24d39434eb47",
+            "scopes": []
+          },
+          "properties": {
+            "authentication": {
+              "type": "jsonpath",
+              "value": "$.auth"
+            },
+            "table": {
+              "value": "cdemaio_customer",
+              "type": "string"
+            },
+            "data": {
+              "type": "jsonpath",
+              "value": "$.steps.object-helpers-2.result"
+            }
+          }
+        },
+        "ftp-client-1": {
+          "title": "Download Customer Set From SFT",
+          "description": "Get dummy_customer_set_v1.1 from SFTP",
+          "connector": {
+            "name": "ftp-client",
+            "version": "3.0"
+          },
+          "operation": "sftp_download",
+          "output_schema": {},
+          "error_handling": {
+            "strategy": "manual"
+          },
+          "authentication": {
+            "group": "ef3559cb-ee0b-4980-8902-d0f4f38c98b0",
+            "title": "Carm DeMaio's FTP Client account",
+            "service_icon": {
+              "icon_type": "url",
+              "value": "//s3.amazonaws.com/images.tray.io/static/service/icons/5476d876a5d4c5435928544072f024ec.png"
+            },
+            "service_id": "67c450a7-5c78-4267-9ccf-a45225d051e1",
+            "auth_app_id": "3c53741e-f915-4545-8d4e-f2213f4ff52c",
+            "scopes": []
+          },
+          "properties": {
+            "path": {
+              "value": "/tray_candidate/dummy_customer_set_v1.2.csv",
+              "type": "string"
+            }
+          }
+        },
+        "send-email-1": {
+          "title": "Error Email FTP Connection",
+          "description": "Send Email that SFTP is down",
+          "connector": {
+            "name": "send-email",
+            "version": "1.0"
+          },
+          "operation": "send_text_email",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "from": {
+              "type": "object",
+              "value": {
+                "email": {
+                  "type": "string",
+                  "value": "notifications@m.traymail.io"
+                },
+                "name": {
+                  "type": "string",
+                  "value": "tray.io notifications"
+                }
+              }
+            },
+            "public_url": {
+              "type": "jsonpath",
+              "value": "$.env.public_url"
+            },
+            "subject": {
+              "value": "Workflow is down at FTP Download",
+              "type": "string"
+            },
+            "to": {
+              "value": [
+                {
+                  "value": {
+                    "email": {
+                      "value": "carmino.demaio@outlook.com",
+                      "type": "string"
+                    },
+                    "name": {
+                      "value": "Carm",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              ],
+              "type": "array"
+            },
+            "content": {
+              "value": "Your workflow failed at the retrieval of the csv from the FTP.",
+              "type": "string"
+            }
+          }
+        },
+        "text-helpers-1": {
+          "title": "Split name",
+          "description": "Splits name into first_name and last_name",
+          "connector": {
+            "name": "text-helpers",
+            "version": "1.13"
+          },
+          "operation": "split",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "text": {
+              "value": "$.steps.loop-1.value.name",
+              "type": "jsonpath"
+            },
+            "split_by": {
+              "value": " ",
+              "type": "string"
+            }
+          }
+        },
+        "object-helpers-3": {
+          "title": "add new values",
+          "description": "Adds new required fields to the schema",
+          "connector": {
+            "name": "object-helpers",
+            "version": "3.0"
+          },
+          "operation": "add_key_value_pairs",
+          "output_schema": {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "object",
+                "properties": {
+                  "first_name": {
+                    "type": "null"
+                  },
+                  "last_name": {
+                    "type": "null"
+                  },
+                  "student": {
+                    "type": "null"
+                  },
+                  "signupDate": {
+                    "type": "null"
+                  },
+                  "executive": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          },
+          "error_handling": {},
+          "properties": {
+            "source": {
+              "type": "jsonpath",
+              "value": "$.steps.loop-1.value"
+            },
+            "list": {
+              "value": [
+                {
+                  "value": {
+                    "key": {
+                      "value": "first_name",
+                      "type": "string"
+                    },
+                    "value": {
+                      "value": "$.steps.text-helpers-1.result[0]",
+                      "type": "jsonpath"
+                    }
+                  },
+                  "type": "object"
+                },
+                {
+                  "value": {
+                    "key": {
+                      "value": "last_name",
+                      "type": "string"
+                    },
+                    "value": {
+                      "value": "$.steps.text-helpers-1.result[1]",
+                      "type": "jsonpath"
+                    }
+                  },
+                  "type": "object"
+                },
+                {
+                  "value": {
+                    "key": {
+                      "value": "student",
+                      "type": "string"
+                    },
+                    "value": {
+                      "value": "$.steps.text-helpers-2.result",
+                      "type": "jsonpath"
+                    }
+                  },
+                  "type": "object"
+                },
+                {
+                  "value": {
+                    "key": {
+                      "value": "signupDate",
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "jsonpath",
+                      "value": "$.steps.date-time-helpers-1.result"
+                    }
+                  },
+                  "type": "object"
+                },
+                {
+                  "value": {
+                    "key": {
+                      "value": "executive",
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "jsonpath",
+                      "value": "$.steps.script-2.result"
+                    }
+                  },
+                  "type": "object"
+                }
+              ],
+              "type": "array"
+            }
+          }
+        },
+        "loop-1": {
+          "title": "Loop Collection",
+          "description": "Loops over the objects and performs relevant business logic to them.",
+          "connector": {
+            "name": "loop",
+            "version": "1.1"
+          },
+          "operation": "loop_array",
+          "output_schema": {
+            "type": "object",
+            "$schema": "http://json-schema.org/draft-03/schema",
+            "id": "http://jsonschema.net",
+            "required": true,
+            "additionalProperties": false,
+            "properties": {
+              "value": {},
+              "count": {
+                "type": "number",
+                "id": "http://jsonschema.net/total"
+              },
+              "index": {
+                "type": "number",
+                "id": "http://jsonschema.net/index"
+              },
+              "is_first": {
+                "type": "boolean",
+                "id": "http://jsonschema.net/is_first"
+              },
+              "is_last": {
+                "type": "boolean",
+                "id": "http://jsonschema.net/is_last"
+              }
+            }
+          },
+          "error_handling": {},
+          "properties": {
+            "array": {
+              "value": "$.steps.csv-reader-1.results.RowData",
+              "type": "jsonpath"
+            }
+          }
+        },
+        "send-email-2": {
+          "title": "Send Email",
+          "connector": {
+            "name": "send-email",
+            "version": "1.0"
+          },
+          "operation": "send_text_email",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "from": {
+              "value": {
+                "email": {
+                  "value": "notifications@m.traymail.io",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string",
+                  "value": "tray.io notifications"
+                }
+              },
+              "type": "object"
+            },
+            "public_url": {
+              "type": "jsonpath",
+              "value": "$.env.public_url"
+            },
+            "to": {
+              "value": [
+                {
+                  "value": {
+                    "email": {
+                      "value": "carmino.demaio@outlook.com",
+                      "type": "string"
+                    },
+                    "name": {
+                      "value": "Carm",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              ],
+              "type": "array"
+            },
+            "subject": {
+              "value": "Workflow is down at FTP Download",
+              "type": "string"
+            },
+            "content": {
+              "value": "Your workflow failed at the retrieval of the csv from the FTP.",
+              "type": "string"
+            }
+          }
+        },
+        "terminate-1": {
+          "title": "Terminate",
+          "connector": {
+            "name": "terminate",
+            "version": "1.0"
+          },
+          "operation": "terminate_run",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {}
+        },
+        "date-time-helpers-1": {
+          "title": "Change Date Format of signupda",
+          "description": "Changes the date format of signup date to meet the requirements of the challenge",
+          "connector": {
+            "name": "date-time-helpers",
+            "version": "2.1"
+          },
+          "operation": "format",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "date": {
+              "value": "$.steps.loop-1.value.signupDate",
+              "type": "jsonpath"
+            },
+            "timezone": {
+              "type": "string",
+              "value": "UTC"
+            },
+            "format": {
+              "value": {
+                "existing_format": {
+                  "value": "YYYY-MM-DD",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        },
+        "text-helpers-2": {
+          "title": ".edu Finder",
+          "description": "Returns true if email address contains an .edu domain",
+          "connector": {
+            "name": "text-helpers",
+            "version": "1.13"
+          },
+          "operation": "contains",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "pattern": {
+              "value": ".edu",
+              "type": "string"
+            },
+            "text_to_search": {
+              "value": "$.steps.loop-1.value.email",
+              "type": "jsonpath"
+            }
+          }
+        },
+        "break-loop-1": {
+          "title": "Break Loop",
+          "connector": {
+            "name": "break-loop",
+            "version": "1.0"
+          },
+          "operation": "break",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {}
+        },
+        "object-helpers-1": {
+          "title": "Remove values",
+          "description": "Removes values for columns that do not exist in out database",
+          "connector": {
+            "name": "object-helpers",
+            "version": "3.0"
+          },
+          "operation": "delete_value_by_key",
+          "output_schema": {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          "error_handling": {},
+          "properties": {
+            "source": {
+              "type": "jsonpath",
+              "value": "$.steps.object-helpers-3.result"
+            },
+            "key": {
+              "value": "name",
+              "type": "string"
+            }
+          }
+        },
+        "delay-1": {
+          "title": "Delay 2 seconds",
+          "description": "Saw that putting a delay here is considered best practice,",
+          "connector": {
+            "name": "delay",
+            "version": "1.0"
+          },
+          "operation": "delay",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "time_unit": {
+              "value": "seconds",
+              "type": "string"
+            },
+            "delay_value": {
+              "value": 2,
+              "type": "number"
+            }
+          }
+        },
+        "script-2": {
+          "title": "Title Search",
+          "connector": {
+            "name": "script",
+            "version": "2.2"
+          },
+          "operation": "execute",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "variables": {
+              "value": [
+                {
+                  "value": {
+                    "name": {
+                      "value": "title",
+                      "type": "string"
+                    },
+                    "value": {
+                      "value": "$.steps.loop-1.value.title",
+                      "type": "jsonpath"
+                    }
+                  },
+                  "type": "object"
+                }
+              ],
+              "type": "array"
+            },
+            "script": {
+              "value": "// You can reference the input variables using input.NAME\nexports.step = function(input) {\n  const text = input.title\n  const res = text.match(/(President|Chief|Senior)/gi);\n  return res != null;\n};",
+              "type": "string"
+            }
+          }
+        },
+        "trigger": {
+          "title": "Manual Trigger",
+          "connector": {
+            "name": "noop",
+            "version": "1.0"
+          },
+          "operation": "trigger",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {}
+        }
+      },
+      "dependencies": []
+    }
+  ]
+}
